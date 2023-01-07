@@ -1,5 +1,6 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+
+pragma solidity >=0.7.0 <0.9.8;
 
 contract zkSyncMessagingDApp {
     struct User {
@@ -20,7 +21,7 @@ contract zkSyncMessagingDApp {
     struct message {
         address msgSenderPubKey;
         string msgData;
-        string timestamp;
+        uint256 timestamp;
     }
 
     mapping (address => User) Users;
@@ -93,6 +94,12 @@ contract zkSyncMessagingDApp {
         require(_checkUserExists(friend_publickey), "The Person you have intended to Send Is not yet regsitered");
         require(_alreadyFriends(msg.sender, friend_publickey), "You are not a friend of that person, Please send Friend Request to that person");
         bytes32 sessionKey = _sessionKey(msg.sender, friend_publickey);
-        
+        message memory newMsg = message(msg.sender, msgData, block.timestamp);
+        messages[sessionKey].push(newMsg);
+    }
+
+    function readMessage(address friend_pubkey) external view returns(message[] memory) {
+        bytes32 chatCode = _sessionKey(msg.sender, friend_pubkey);
+        return messages[chatCode];
     }
 }

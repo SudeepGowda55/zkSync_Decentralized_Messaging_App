@@ -1,6 +1,22 @@
 import Head from 'next/head'
+import { Web3Provider, Provider, Contract } from 'zksync-web3'
+import { zkSyncMessagingDAppAddress, zkSyncMessagingDAppABI } from '../utils/ContractInfo';
 
 export default function Home() {
+
+  let zkprovider, signer, contract;
+
+  const connectionReq = async () => {
+    zkprovider = new Provider("https://zksync2-testnet.zksync.dev");
+    if (window.ethereum) {
+      console.log("Hello")
+      signer = (new Web3Provider(window.ethereum)).getSigner();
+      contract = new Contract(zkSyncMessagingDAppAddress, zkSyncMessagingDAppABI, signer);
+      console.log(signer)
+      console.log("connec")
+    }
+  }
+
   return (
     <>
       <Head>
@@ -11,6 +27,7 @@ export default function Home() {
       </Head>
       <main>
         <div>Hello ZKP</div>
+        <button onClick={connectionReq}>Connect</button>
       </main>
     </>
   )

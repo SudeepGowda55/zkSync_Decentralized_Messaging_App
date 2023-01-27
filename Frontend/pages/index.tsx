@@ -1,19 +1,36 @@
-import Head from 'next/head'
-import { Web3Provider, Provider, Contract } from 'zksync-web3'
-import { zkSyncMessagingDAppAddress, zkSyncMessagingDAppABI } from '../utils/ContractInfo';
+import Head from 'next/head';
+import { useContext, useEffect, useState } from 'react';
+import { zksyncContext } from '../utils/context';
 
 export default function Home() {
 
-  let zkprovider, signer, contract;
+  const { accountAddress, getAccountsInfo, convertTimeStamp, zksyncProvider, signerInstance, contractInstance, connectionReq } = useContext(zksyncContext);
+  const [allUsers, setAllUsers] = useState([])
+  const [allMessage, setAllMessage] = useState([]);
+  const [date, setDate] = useState<string | null>(null)
 
-  const connectionReq = async () => {
-    zkprovider = new Provider("https://zksync2-testnet.zksync.dev");
-    if (window.ethereum) {
-      console.log("Hello")
-      signer = (new Web3Provider(window.ethereum)).getSigner();
-      contract = new Contract(zkSyncMessagingDAppAddress, zkSyncMessagingDAppABI, signer);
-      console.log(signer)
-      console.log("connec")
+  useEffect(() => { getAccountsInfo() }, [])
+
+  const getAllUsers = async () => {
+    console.log(await contractInstance.getAllUsers())
+    setAllUsers(await contractInstance.getAllUsers())
+  }
+
+  const sendMessage = async () => {
+    try {
+      await contractInstance.sendMessage("Testing Time", "0x9c69b9dE3439b397B921038229E69c6C4d0b3803");
+      alert("Message Sent")
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const readMessage = async () => {
+    console.log(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
+    setAllMessage(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
+    if (allMessage[4]) {
+      setDate(await convertTimeStamp(allMessage[4].timestamp))
+      console.log(await convertTimeStamp(allMessage[4].timestamp))
     }
   }
 
@@ -26,8 +43,24 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>Hello ZKP</div>
-        <button onClick={connectionReq}>Connect</button>
+
+        {accountAddress == null ? <button onClick={() => { connectionReq() }}>Connect To Metamask</button>
+          :
+          <>
+            <div>Hello Sudeep, Your Present Account Address is {accountAddress}</div>
+            <button onClick={getAllUsers}>Get All The Users</button>
+            <div>
+              {allUsers[0]}
+              <br />
+              {allUsers[1]}
+            </div>
+            <div>
+              <button onClick={sendMessage}>Send Message</button>
+              <button onClick={readMessage}>Read Message</button>
+              {date != null ? <p>{date}</p> : ""}
+            </div>
+          </>
+        }
       </main>
     </>
   )

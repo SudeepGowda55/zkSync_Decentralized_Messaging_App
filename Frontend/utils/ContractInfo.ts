@@ -1,4 +1,4 @@
-export const zkSyncMessagingDAppAddress: string = "0x04d45381653F615d34EE6dFa317f0172014058E5";
+export const contractDeployedAddress: string = "0x04d45381653F615d34EE6dFa317f0172014058E5";
 export const zkSyncMessagingDAppABI = [
     {
         "inputs": [

@@ -35,6 +35,7 @@ contract zkSyncMessagingDApp {
 
     function createUser(string calldata username) external {
         require(_checkUserExists(msg.sender) == false, "User Account already created for this wallet");
+        require(bytes(username).length > 0, "Please Enter Your Name");
         Users[msg.sender].name = username;
         allUsers.push(completeUser(username, msg.sender));
     }

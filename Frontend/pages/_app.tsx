@@ -4,19 +4,24 @@ import { Provider, Web3Provider, Signer, Contract } from 'zksync-web3';
 import { useState } from 'react';
 import { zksyncContext } from '../utils/context';
 import { contractDeployedAddress, zkSyncMessagingDAppABI } from '../utils/ContractInfo';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { ChakraProvider } from '@chakra-ui/react'
+
+declare let window: any;
 
 export default function App({ Component, pageProps }: AppProps) {
 
+  const chainId = 280;
+
   const zksyncProvider: Provider = new Provider("https://zksync2-testnet.zksync.dev");
-  const [accountAddress, setAccountAddress] = useState<string | null>();
-  const [signerInstance, setSignerInstance] = useState<Signer | null>();
-  const [contractInstance, setContractInstance] = useState<Contract | null>();
-  const [firstName, setFirstName] = useState("");
+
+  const [accountAddress, setAccountAddress] = useState<string | null>(null);
+  const [signerInstance, setSignerInstance] = useState<Signer | null>(null);
+
+  const [contractInstance, setContractInstance] = useState<Contract | null>(null);
 
   async function connectionReq() {
-    if (window.ethereum) {
+    if (window.ethereum != null) {
       try {
         await window.ethereum.request({ method: "eth_requestAccounts" })
       } catch (error) {
@@ -29,21 +34,38 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   async function getAccountsInfo() {
-    if (window.ethereum) {
+    if (window.ethereum != null) {
       try {
-        const accounts = await window.ethereum.request({ method: "eth_accounts" })
-        if (accounts != null && +window.ethereum.networkVersion == 280) {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        if (accounts != null) {
           const signer: Signer = (new Web3Provider(window.ethereum)).getSigner();
           setSignerInstance(signer);
+
           const contract: Contract = new Contract(contractDeployedAddress, zkSyncMessagingDAppABI, signer);
           setContractInstance(contract);
+
           console.log("Getting user Info")
-          setFirstName(await contract.getUserName(accounts[0]))
-          setAccountAddress(accounts[0]);
-          console.log("Connection Successful");
+
+          if (window.ethereum.networkVersion != chainId) {
+            try {
+              await window.ethereum.request({
+                method: "wallet_switchEthereumChain",
+                params: [{ chainId: ethers.utils.hexValue(chainId) }]
+              });
+              setAccountAddress(accounts[0]);
+              window.location.reload();
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          else {
+            setAccountAddress(accounts[0]);
+            console.log("Connection Successful");
+            window.location.reload();
+          }
         }
         else {
-          alert("Please switch Metamask to zkSync! network to continue in this website");
+          alert("Please Check Metamask whether its connected!!");
           return;
         }
       } catch (error) {
@@ -52,6 +74,19 @@ export default function App({ Component, pageProps }: AppProps) {
     }
     else {
       alert("Please Install Metamask");
+    }
+  }
+
+  async function getAccountsAddress() {
+    if (window.ethereum != null) {
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        if (accounts != null) {
+          setAccountAddress(accounts[0]);
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -64,7 +99,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider>
-      <zksyncContext.Provider value={{ accountAddress, getAccountsInfo, convertTimeStamp, firstName, zksyncProvider, signerInstance, contractInstance, connectionReq }}>
+      <zksyncContext.Provider value={{ connectionReq, getAccountsInfo, getAccountsAddress, accountAddress, zksyncProvider, signerInstance, contractInstance }}>
         <Component {...pageProps} />
       </zksyncContext.Provider>
     </ChakraProvider>

@@ -1,10 +1,11 @@
 import Head from 'next/head';
 import { useContext, useEffect, useState } from 'react';
 import { zksyncContext } from '../utils/context';
+import Sidebar from '../components/Sidebar';
 
 const messaging = () => {
 
-    const { firstName, accountAddress, getAccountsInfo, convertTimeStamp, zksyncProvider, signerInstance, contractInstance, connectionReq } = useContext(zksyncContext);
+    const { firstName, accountAddress, getAccountsAddress, getAccountsInfo, convertTimeStamp, zksyncProvider, signerInstance, contractInstance, connectionReq } = useContext(zksyncContext);
     const [allUsers, setAllUsers] = useState([])
     const [allMessage, setAllMessage] = useState([]);
     const [date, setDate] = useState<string | null>(null)
@@ -12,7 +13,7 @@ const messaging = () => {
     const indexNo: number = 2;
 
     useEffect(() => {
-        getAccountsInfo();
+        getAccountsAddress();
     }, [])
 
     const getAllUsers = async () => {
@@ -30,14 +31,14 @@ const messaging = () => {
         }
     }
 
-    const readMessage = async () => {
-        console.log(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
-        setAllMessage(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
-        if (allMessage[4]) {
-            setDate(await convertTimeStamp(allMessage[4].timestamp))
-            console.log(await convertTimeStamp(allMessage[4].timestamp))
-        }
-    }
+    // const readMessage = async () => {
+    //     console.log(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
+    //     setAllMessage(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
+    //     if (allMessage[4]) {
+    //         setDate(await convertTimeStamp(allMessage[4].timestamp))
+    //         console.log(await convertTimeStamp(allMessage[4].timestamp))
+    //     }
+    // }
 
 
     return (
@@ -50,7 +51,7 @@ const messaging = () => {
             </Head>
             <main>
                 <>
-                    <div>Hello {firstName}, Your Present Account Address is {accountAddress}</div>
+                    {/* <div>Hello {firstName}, Your Present Account Address is {accountAddress}</div>
                     <button onClick={getAllUsers}>Get All The Users</button>
                     <div>
                         {allUsers[0]}
@@ -59,7 +60,7 @@ const messaging = () => {
                     </div>
                     <div>
                         <button onClick={sendMessage}>Send Message</button>
-                        <button onClick={readMessage}>Read Message</button>
+                        <button onClick={readMessage}>Read Message</button>fr
                         {date != null ? <p>{date}</p> : ""}
                         {allMessage != null ?
                             <>{allMessage.map((data, index) =>
@@ -71,6 +72,100 @@ const messaging = () => {
                             :
                             <p></p>
                         }
+                    </div> */}
+                    <div className='flex flex-row w-[100vw]'>
+                        <Sidebar />
+                        <div className='w-[75vw]'>
+                            <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1.5vw] p-[1vw]'>
+                                <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                <span className=''>
+                                    <p className='font-bold text-[1vw]'>{accountAddress}</p>
+                                    <p>Typing ...</p>
+                                </span>
+                            </div>
+                            <hr />
+                            <div className='p-[1vw] mt-[2vh] h-[77vh] w-[75vw] overflow-y-auto'>
+                                <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <br />
+                                <div className='h-[10vh] flex flex-row ml-[45vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>I have Sent the consigmnet </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>It has reached Mumbai </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <br />
+                                <div className='h-[10vh] flex flex-row ml-[45vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Ok  </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Thanks have a good day </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <br />
+                                <div className='h-[10vh] flex flex-row ml-[45vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <br />
+                                <div className='h-[10vh] flex flex-row ml-[45vw] space-x-[1vw]'>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                                <br />
+                                <div className='h-[10vh] flex flex-row ml-[45vw] space-x-[1vw] '>
+                                    <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
+                                    <span className='bg-gray-100 p-[1vw] min-w-[10vw] w-[20vw] space-y-[0.6vw]'>
+                                        <p>Hello, Good Morning! </p>
+                                        <p>08:55</p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div className='flex flex-row w-[70vw] ml-[2vw] space-x-[2vw]'>
+                                <input type="text" placeholder='Type Your Message here ...' className='w-[65vw] px-[3vw] mt-[3vh] h-[5vh] rounded-2xl border border-zinc-500' />
+                                <button className='mt-[3vh]'>Send</button>
+                            </div>
+                        </div>
                     </div>
                 </>
             </main>

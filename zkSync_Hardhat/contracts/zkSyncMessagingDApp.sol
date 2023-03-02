@@ -5,15 +5,11 @@ pragma solidity >=0.7.0 <0.9.8;
 contract zkSyncMessagingDApp {
     struct User {
         string name;
+        string publicAddress;
         friend[] friends;
     }
 
     struct friend {
-        string name;
-        address publicAddress;
-    }
-
-    struct completeUser {
         string name;
         address publicAddress;
     }
@@ -27,8 +23,6 @@ contract zkSyncMessagingDApp {
     mapping (address => User) Users;
     mapping (bytes32 => message[]) messages;
 
-    completeUser[] allUsers;
-
     function _checkUserExists(address userAddress) internal view returns(bool) {
         return (bytes(Users[userAddress].name).length > 0);
     }
@@ -37,16 +31,12 @@ contract zkSyncMessagingDApp {
         require(_checkUserExists(msg.sender) == false, "User Account already created for this wallet");
         require(bytes(username).length > 0, "Please Enter Your Name");
         Users[msg.sender].name = username;
-        allUsers.push(completeUser(username, msg.sender));
+        
     }
 
     function getUserName(address publicAddress) external view returns(string memory) {
         require(_checkUserExists(publicAddress), "There has been no User Account created with this wallet public Address");
         return (Users[publicAddress].name);
-    }
-
-    function getAllUsers() public view returns(completeUser[] memory) {
-        return (allUsers);
     }
 
     function addFriend(string memory friendName, address friend_address) public {

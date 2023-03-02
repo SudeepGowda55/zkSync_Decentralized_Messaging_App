@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { zksyncContext } from '../utils/context';
 import { useRouter } from 'next/router';
 
 export default function Home() {
 
-  const { accountAddress, getAccountsInfo, connectionReq } = useContext(zksyncContext);
+  const { accountAddress, getAccountsAddress, getAccountsInfo, connectionReq } = useContext(zksyncContext);
 
   const router = useRouter();
 
@@ -15,7 +15,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getAccountsInfo();
+    getAccountsAddress();
   }, [])
 
   return (
@@ -29,22 +29,32 @@ export default function Home() {
       <main>
         <>
           <div className='bg-green-200 w-[100vw] h-[100vh] flex flex-row'>
-            <div className='bg-blue-400 w-[40vw] my-[5vh] rounded-l-3xl ml-[8vw]'>
-              <p className='font-semibold text-3xl pt-[20vh] px-[5vw]'> Devil Entering <br /> <br /> Decentralised  Messaging world</p>
+            <div className='bg-white w-[40vw] my-[5vh] rounded-l-3xl ml-[8vw]'>
+              <div className='border mt-[10vw] ml-[5vw] p-[3vw] w-[25vw] h-[48vh] border-zinc-100 shadow-md'>
+                <p className='font-extrabold text-[1.5vw]'>Welcome</p>
+                <br />
+                <p className='font-extrabold text-[1.5vw]'>To Our Freedom World</p>
+                <br />
+                <hr />
+                <br />
+                <p className='font-extrabold text-[1.5vw]'>Login To Dapp</p>
+                {accountAddress == null ?
+                  <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={connectMetamask}>Connect To Metamask</button>
+                  :
+                  <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={() => router.push("/messaging")}>Enter Into the Application</button>
+                }
+              </div>
             </div>
-
-            <div className='w-[40vw] my-[5vh] bg-white rounded-r-3xl'>
-              <div className='border border-slate-300 rounded-[2vw] h-[62vh] mt-[15vh] mx-[5vw]'>
-                <p className='pt-[20vh] pl-[5vw] font-bold text-2xl'>Welcome To Your Freedom World</p>
+            <div className='w-[40vw] my-[5vh] bg-blue-400 rounded-r-3xl'>
+              <div className='border border-slate-300 rounded-[2vw] h-[62vh] mt-[9vh] mx-[5vw]'>
+                <p className='pt-[3.5vh] pl-[7vw] font-bold text-[3.2vw]'>Decentralised</p>
+                <p className='pt-[1vh] pl-[12.5vw] font-bold text-[2.6vw]'>Anonymous</p>
+                <p className='pt-[1vh] pl-[16.2vw] font-bold text-[2vw]'>Messaging</p>
+                <p className='pt-[1vh] pl-[21vw] font-bold text-[1.7vw]'>World</p>
                 <br />
                 <br />
                 <hr />
-                <p className='pt-[4.5vh] pl-[10vw] font-semibold text-xl'>Please Login to Dapp</p>
-                {accountAddress == null ?
-                  <button className='mt-[8vh] rounded-lg w-[14vw] min-w-[14vw] ml-[8.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={connectMetamask}>Connect To Metamask</button>
-                  :
-                  <button className='mt-[8vh] rounded-lg w-[14vw] min-w-[14vw] ml-[8.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={() => router.push("/messaging")}>Enter Into the Application</button>
-                }
+                <p className='pt-[6vh] pl-[6.5vw] font-semibold text-[2.5vw]'>Whistleblower</p>
               </div>
             </div>
           </div>

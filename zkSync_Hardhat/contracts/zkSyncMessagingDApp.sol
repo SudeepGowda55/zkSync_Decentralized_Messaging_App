@@ -5,7 +5,7 @@ pragma solidity >=0.7.0 <0.9.8;
 contract zkSyncMessagingDApp {
     struct User {
         string name;
-        string publicAddress;
+        address publicAddress;
         friend[] friends;
     }
 
@@ -31,7 +31,7 @@ contract zkSyncMessagingDApp {
         require(_checkUserExists(msg.sender) == false, "User Account already created for this wallet");
         require(bytes(username).length > 0, "Please Enter Your Name");
         Users[msg.sender].name = username;
-        
+        Users[msg.sender].publicAddress = msg.sender;
     }
 
     function getUserName(address publicAddress) external view returns(string memory) {

@@ -9,9 +9,24 @@ export default function Home() {
 
   const router = useRouter();
 
+  function getPassword(){
+      const passwd : string | null = prompt("Enter your password");
+      if (passwd?.length == null) {
+        getPassword();
+      }
+      else if (passwd?.length < 15 ) {
+        alert(`Your password should be minimum 15 characters`)
+        getPassword();
+      }
+      else if (passwd?.length > 15) {
+        alert(`The password you entered is ${passwd}`)
+      }
+  }
+
   const connectMetamask = async () => {
     await connectionReq();
     await getAccountsInfo();
+    getPassword();
   }
 
   useEffect(() => {
@@ -33,11 +48,11 @@ export default function Home() {
               <div className='border mt-[10vw] ml-[5vw] p-[3vw] w-[25vw] h-[48vh] border-zinc-100 shadow-md'>
                 <p className='font-extrabold text-[1.5vw]'>Welcome</p>
                 <br />
-                <p className='font-extrabold text-[1.5vw]'>To Our Freedom World</p>
+                <p className='font-extrabold text-[1.5vw]'>To your Freedom Dapp</p>
                 <br />
                 <hr />
                 <br />
-                <p className='font-extrabold text-[1.5vw]'>Login To Dapp</p>
+                <p className=' text-[1.5vw]'>Login Here</p>
                 {accountAddress == null ?
                   <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={connectMetamask}>Connect To Metamask</button>
                   :
@@ -54,7 +69,7 @@ export default function Home() {
                 <br />
                 <br />
                 <hr />
-                <p className='pt-[6vh] pl-[6.5vw] font-semibold text-[2.5vw]'>Whistleblower</p>
+                <p className='pt-[6vh] pl-[6.5vw] text-[2.5vw]'>Whistleblower</p>
               </div>
             </div>
           </div>

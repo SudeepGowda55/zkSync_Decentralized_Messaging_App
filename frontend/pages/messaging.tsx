@@ -5,31 +5,31 @@ import Sidebar from '../components/Sidebar';
 
 const messaging = () => {
 
-    const { firstName, accountAddress, getAccountsAddress, getAccountsInfo, convertTimeStamp, zksyncProvider, signerInstance, contractInstance, connectionReq } = useContext(zksyncContext);
-    const [allUsers, setAllUsers] = useState([])
-    const [allMessage, setAllMessage] = useState([]);
-    const [date, setDate] = useState<string | null>(null)
+    // const { firstName, accountAddress, getAccountsAddress, getAccountsInfo, convertTimeStamp, zksyncProvider, signerInstance, contractInstance, connectionReq } = useContext(zksyncContext);
+    // const [allUsers, setAllUsers] = useState([])
+    // const [allMessage, setAllMessage] = useState([]);
+    // const [date, setDate] = useState<string | null>(null)
 
-    const indexNo: number = 2;
+    // const indexNo: number = 2;
 
-    useEffect(() => {
-        getAccountsAddress();
-    }, [])
+    // useEffect(() => {
+    //     getAccountsAddress();
+    // }, [])
 
-    const getAllUsers = async () => {
-        console.log(await contractInstance.getAllUsers())
-        setAllUsers(await contractInstance.getAllUsers())
-    }
+    // const getAllUsers = async () => {
+    //     console.log(await contractInstance.getAllUsers())
+    //     setAllUsers(await contractInstance.getAllUsers())
+    // }
 
 
-    const sendMessage = async () => {
-        try {
-            await contractInstance.sendMessage("Testing Time", "0x9c69b9dE3439b397B921038229E69c6C4d0b3803");
-            alert("Message Sent")
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const sendMessage = async () => {
+    //     try {
+    //         await contractInstance.sendMessage("Testing Time", "0x9c69b9dE3439b397B921038229E69c6C4d0b3803");
+    //         alert("Message Sent")
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
     // const readMessage = async () => {
     //     console.log(await contractInstance.readMessage("0x9c69b9dE3439b397B921038229E69c6C4d0b3803"))
@@ -79,7 +79,7 @@ const messaging = () => {
                             <div className='h-[10vh] flex flex-row ml-[2vw] space-x-[1.5vw] p-[1vw]'>
                                 <p className='bg-blue-100 rounded-full w-[3vw] h-[5vh] font-bold text-[1vw] text-blue-700 pt-[0.5vw] pl-[0.8vw]'>SG</p>
                                 <span className=''>
-                                    <p className='font-bold text-[1vw]'>{accountAddress}</p>
+                                    {/* <p className='font-bold text-[1vw]'>{accountAddress}</p> */}
                                     <p>Typing ...</p>
                                 </span>
                             </div>

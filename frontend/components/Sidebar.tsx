@@ -13,7 +13,7 @@ const Sidebar = () => {
                     <p>logo</p>
                     <span>
                         <p className="text-[1vw] pt-[1vh] font-semibold">Sudeep Gowda</p>
-                        <p>Hey! I'm available </p>
+                        <p>Hey! I&apos;m available </p>
                     </span>
                 </div>
                 <hr />
@@ -21,7 +21,7 @@ const Sidebar = () => {
                     <p>logo</p>
                     <span>
                         <p className="text-[1vw] pt-[1vh] font-semibold">Sudeep Gowda</p>
-                        <p>Hey! I'm available </p>
+                        <p>Hey! I&apos;m available </p>
                     </span>
                 </div>
                 <hr />
@@ -29,7 +29,7 @@ const Sidebar = () => {
                     <p>logo</p>
                     <span>
                         <p className="text-[1vw] pt-[1vh] font-semibold">Sudeep Gowda</p>
-                        <p>Hey! I'm available </p>
+                        <p>Hey! I&apos;m available </p>
                     </span>
                 </div>
                 <hr />
@@ -37,7 +37,7 @@ const Sidebar = () => {
                     <p>logo</p>
                     <span>
                         <p className="text-[1vw] pt-[1vh] font-semibold">Sudeep Gowda</p>
-                        <p>Hey! I'm available </p>
+                        <p>Hey! I&apos;m available </p>
                     </span>
                 </div>
             </div>

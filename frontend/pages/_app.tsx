@@ -61,7 +61,6 @@ export default function App({ Component, pageProps }: AppProps) {
           else {
             setAccountAddress(accounts[0]);
             console.log("Connection Successful");
-            window.location.reload();
           }
         }
         else {

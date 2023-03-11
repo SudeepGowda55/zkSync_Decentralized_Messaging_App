@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useContext, useEffect } from 'react';
 import { zksyncContext } from '../utils/context';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 export default function Home() {
 
@@ -9,24 +10,46 @@ export default function Home() {
 
   const router = useRouter();
 
-  function getPassword(){
-      const passwd : string | null = prompt("Enter your password");
-      if (passwd?.length == null) {
-        getPassword();
-      }
-      else if (passwd?.length < 15 ) {
-        alert(`Your password should be minimum 15 characters`)
-        getPassword();
-      }
-      else if (passwd?.length > 15) {
-        alert(`The password you entered is ${passwd}`)
-      }
+  function getPassword() {
+    const passwd: string | null = prompt("Enter your password (it can have space, symbol, uppercase, anything)");
+    if (passwd?.length == null) {
+      getPassword();
+    }
+    else if (passwd?.length < 15) {
+      alert(`Your password should be minimum 15 characters`)
+      getPassword();
+    }
+    else if (passwd?.length > 15) {
+      alert(`The password you entered is ${passwd}`)
+      return(passwd)
+    }
+  }
+
+  function getSalt() {
+    const salt: string | null = prompt("Enter your salt");
+    if (salt?.length == null) {
+      getSalt();
+    }
+    else if (salt?.length < 15) {
+      alert(`Your Salt should be minimum 15 characters`)
+      getSalt();
+    }
+    else if (salt?.length > 15) {
+      alert(`The Salt you entered is ${salt}`)
+      return(salt)
+    }
   }
 
   const connectMetamask = async () => {
     await connectionReq();
     await getAccountsInfo();
-    getPassword();
+    const password = getPassword();
+    const salt = getSalt();
+    const keys = {passwd: password, salt: salt}
+    const response = await axios.post('/api/hello', {keys})
+    alert(`Your Master key is ${response.data}`) 
+    sessionStorage.setItem("key", response.data)
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -53,11 +76,11 @@ export default function Home() {
                 <hr />
                 <br />
                 <p className=' text-[1.5vw]'>Login Here</p>
-                {accountAddress == null ?
-                  <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={connectMetamask}>Connect To Metamask</button>
-                  :
+                {accountAddress == null || sessionStorage.getItem("keys") != null ?
+                <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={connectMetamask}>Connect To Metamask</button>
+                 :
                   <button className='mt-[3vh] rounded-lg w-[14vw] min-w-[14vw] ml-[2.5vw] bg-gradient-to-r from-[#A6C1EE] text-lg font-semibold h-[5vh] to-[#FBC2EB]' onClick={() => router.push("/messaging")}>Enter Into the Application</button>
-                }
+                } 
               </div>
             </div>
             <div className='w-[40vw] my-[5vh] bg-blue-400 rounded-r-3xl'>

@@ -71,26 +71,4 @@ contract zkSyncMessagingDApp {
         return Users[msg.sender].friends;
     }
 
-    function _sessionKey(address publicKey1, address publicKey2) internal pure returns(bytes32) {
-        if (publicKey1 > publicKey2){
-            return keccak256(abi.encode(publicKey1, publicKey2));
-        }
-        else {
-            return keccak256(abi.encode(publicKey2, publicKey1));
-        }
-    }
-
-    function sendMessage(string memory msgData, address friend_publickey ) external {
-        require(_checkUserExists(msg.sender), "Please Register to send messages");
-        require(_checkUserExists(friend_publickey), "The Person you have intended to Send Is not yet regsitered");
-        require(_alreadyFriends(msg.sender, friend_publickey), "You are not a friend of that person, Please send Friend Request to that person");
-        bytes32 sessionKey = _sessionKey(msg.sender, friend_publickey);
-        message memory newMsg = message(msg.sender, msgData, block.timestamp);
-        messages[sessionKey].push(newMsg);
-    }
-
-    function readMessage(address friend_pubkey) external view returns(message[] memory) {
-        bytes32 chatCode = _sessionKey(msg.sender, friend_pubkey);
-        return messages[chatCode];
-    }
 }

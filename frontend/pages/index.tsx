@@ -43,13 +43,23 @@ export default function Home() {
   const connectMetamask = async () => {
     await connectionReq();
     await getAccountsInfo();
-    const password = getPassword();
-    const salt = getSalt();
-    const keys = {passwd: password, salt: salt}
-    const response = await axios.post('/api/hello', {keys})
-    alert(`Your Master key is ${response.data}`) 
-    sessionStorage.setItem("key", response.data)
-    window.location.reload();
+    try {
+      if (sessionStorage.getItem("key") == null) {
+        const password = getPassword();
+        const salt = getSalt();
+        const keys = {passwd: password, salt: salt}
+        const response = await axios.post('/api/hello', {keys})
+        alert(`Your Master key is ${response.data}`) 
+        sessionStorage.setItem("key", response.data)
+        window.location.reload(); 
+      }
+      else if(sessionStorage.getItem("key") != null) {
+        window.location.reload(); 
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  
   }
 
   useEffect(() => {
@@ -86,9 +96,9 @@ export default function Home() {
             <div className='w-[40vw] my-[5vh] bg-blue-400 rounded-r-3xl'>
               <div className='border border-slate-300 rounded-[2vw] h-[62vh] mt-[9vh] mx-[5vw]'>
                 <p className='pt-[3.5vh] pl-[7vw] font-bold text-[3.2vw]'>Decentralised</p>
-                <p className='pt-[1vh] pl-[12.5vw] font-bold text-[2.6vw]'>Anonymous</p>
+                <p className='pt-[1vh] pl-[12.5vw] font-bold text-[2.6vw]'>Secure</p>
                 <p className='pt-[1vh] pl-[16.2vw] font-bold text-[2vw]'>Messaging</p>
-                <p className='pt-[1vh] pl-[21vw] font-bold text-[1.7vw]'>World</p>
+                <p className='pt-[1vh] pl-[21vw] font-bold text-[1.7vw]'>App</p>
                 <br />
                 <br />
                 <hr />
